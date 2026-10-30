@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+    id 'io.freefair.lombok' version '9.5.0'
+    id 'com.bakdata.mockito' version '2.2.1' // Configures Mockito Java Agent for Java 21+.
+}
+
+group = 'org.monke.lsm'
+description = 'Custom LSM-Tree implementation.'
+version = '0.1.0'
+
+wrapper {
+    gradleVersion = '9.2'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:6.0.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+}

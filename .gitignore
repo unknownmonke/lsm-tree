@@ -1,0 +1,15 @@
+.env
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+build/
+out/
+!**/src/main/**/build/
+!**/src/test/**/build/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
