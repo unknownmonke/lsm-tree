@@ -1,7 +1,9 @@
 package org.monke.lsm.skiplist;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SkipList {
 
@@ -15,7 +17,7 @@ public class SkipList {
      * Probability of a node being promoted to a higher level.
      * For p = 0.5, a linked list with 10 nodes at the base level will have approximately 5 nodes in the next level of indices.
      */
-    private final int p;
+    private final double p;
 
     /**
      * Current number of levels in the skip list.
@@ -34,7 +36,7 @@ public class SkipList {
     private Node head;
 
 
-    public SkipList(int maxLevel, int p) {
+    public SkipList(int maxLevel, double p) {
         this.maxLevel = maxLevel;
         this.p = p;
         this.levels = 0;
@@ -196,5 +198,88 @@ public class SkipList {
             level++;
         }
         return level;
+    }
+
+    /**
+     * Prints a representation of the skip list for visualization and debugging purposes.
+     *
+     * <p> Each level is printed on a separate line, with nodes represented by their keys and connections represented by dashes.
+     * Number of dashes increase to keep keys in the same vertical column in display.
+     *
+     * <p> Leading spaces may be used to move heads to correct position.
+     *
+     * <p> Ex :
+     * <pre>
+     * Level 0:       3 -- 6 -- 7 -- 9 -- 12 -- 19 -- 21 -- 25 -- 26
+     * Level 1:       3 ---6 ------- 9 -------- 19 -- 21 -- 25 -- 26
+     * Level 2:       3 ------------ 9 -------------- 21 -------- 26
+     * </pre>
+     */
+    public void print() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(System.lineSeparator());
+        sb.append("Skip List :");
+        sb.repeat(System.lineSeparator(), 2);
+
+        Map<Integer, Integer> keyPositionsAtBottomLevel = new HashMap<>();
+
+        for (int i = 0; i < levels; i++) {
+            StringBuilder line = new StringBuilder();
+            sb.append("Level ").append(i).append(":      ");
+
+            boolean eol = false;
+            int position = 0;
+            Node current = head.next[i];
+
+            // Head node only - Adds position if bottom level.
+            if (i == 0) {
+                keyPositionsAtBottomLevel.put(current.entry.key, 0);
+            }
+
+            int positionAtBottomLevel = keyPositionsAtBottomLevel.get(current.entry.key);
+
+            // Head node only - Calculates leading spaces if the head node of the line is not the head node of bottom level.
+            if (i > 0 && positionAtBottomLevel > 0) {
+                line.repeat(" ", positionAtBottomLevel);
+                position = positionAtBottomLevel;
+            }
+
+            while (!eol) {
+                line.append(current.entry.key);
+                Node next = current.next[i];
+
+                if (next != null) {
+                    // Moves position at the end of value.
+                    int keySize = String.valueOf(current.entry.key).length();
+                    position += keySize;
+
+                    // Calculates number of trailing dashes to next node.
+                    int trailingDashes;
+
+                    if (i == 0) {
+                        trailingDashes = 2;
+
+                    } else {
+                        positionAtBottomLevel = keyPositionsAtBottomLevel.get(next.entry.key);
+                        trailingDashes = positionAtBottomLevel - position - 2; // Spaces between dashes and values.
+                    }
+                    // Moves after trailing dashes : the position of the next node.
+                    position += trailingDashes;
+                    position += 2; // Spaces between dashes and values.
+
+                    keyPositionsAtBottomLevel.put(next.entry.key, position);
+                    line.append(" ").repeat("-", Math.max(0, trailingDashes)).append(" ");
+
+                    current = next;
+
+                } else { // End of level reached, go to next.
+                    eol = true;
+                }
+            }
+            sb.append(line);
+            sb.append(System.lineSeparator());
+        }
+        System.out.print(sb);
     }
 }
