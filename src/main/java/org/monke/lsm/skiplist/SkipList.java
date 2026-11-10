@@ -33,7 +33,7 @@ public class SkipList {
     /**
      * Head node, which holds references to the first node in each level.
      */
-    private Node head;
+    protected Node head;
 
 
     public SkipList(int maxLevel, double p) {
@@ -49,7 +49,7 @@ public class SkipList {
      */
     public void insert(Entry entry) {
         Node[] update = new Node[maxLevel + 1];
-        Node current = this.head;
+        Node current = head;
 
         // For each level, starting from highest.
         for (int i = maxLevel; i >= 0; i--) {
@@ -116,7 +116,7 @@ public class SkipList {
      * </ul>
      */
     public Entry find(int key) {
-        Node current = this.head;
+        Node current = head;
 
         // For each level, starting from highest.
         for (int i = maxLevel; i >= 0; i--) {
@@ -178,9 +178,9 @@ public class SkipList {
      * Clearing all entries is equivalent to clearing head since head is the root.
      */
     public void reset() {
-        this.levels = 0;
-        this.size = 0;
-        this.head = new Node(null, maxLevel);
+        levels = 0;
+        size = 0;
+        head = new Node(null, maxLevel);
     }
 
     /**
