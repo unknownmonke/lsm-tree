@@ -21,6 +21,8 @@ repositories {
 def slf4jVersion = '2.0.17'
 def log4j2Version = '2.25.2'
 def junitVersion = '6.0.0'
+def assertjVersion = '3.27.7'
+def mockitoVersion = '5.23.0'
 
 // ------------------------ //
 
@@ -33,6 +35,9 @@ dependencies {
     testImplementation platform("org.junit:junit-bom:$junitVersion")
     testImplementation "org.junit.jupiter:junit-jupiter"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+
+    testImplementation "org.assertj:assertj-core:$assertjVersion"
+    testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
 }
 
 test {
